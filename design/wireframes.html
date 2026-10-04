@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chicken Town – App Wireframes v2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f6f5f4;--ink:#1b1918;--mute:#8b8581;--line:#e8e5e2;--card:#fff;--fill:#f2f0ee;--red:#CC1A16;--sh:0 8px 28px rgba(27,25,24,.10);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141211;--ink:#f3efec;--mute:#9b948e;--line:#2f2b29;--card:#1e1b1a;--fill:#2a2625;--red:#E5332D;--sh:0 8px 28px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#141211;--ink:#f3efec;--mute:#9b948e;--line:#2f2b29;--card:#1e1b1a;--fill:#2a2625;--red:#E5332D;--sh:0 8px 28px rgba(0,0,0,.4)}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--ink);font-family:"DM Sans","Segoe UI",Arial,sans-serif;font-size:13px}
+header{padding:22px 16px 4px}
+h1{font-size:22px;font-weight:700}
+header p{color:var(--mute);margin-top:6px;max-width:58ch;line-height:1.45}
+.sw{display:inline-flex;align-items:center;gap:6px;margin-top:10px;color:var(--mute)}.sw i{width:16px;height:16px;border-radius:50%;background:var(--red);display:inline-block}
+h2{font-size:14px;font-weight:700;padding:20px 16px 8px}
+.row{display:flex;gap:20px;overflow-x:auto;padding:6px 16px 20px;scroll-snap-type:x mandatory}
+.col{flex:0 0 auto;scroll-snap-align:start;width:264px}
+.cap{font-size:12px;color:var(--mute);margin-top:10px;line-height:1.4}.cap b{color:var(--ink)}
+.ph{width:264px;height:548px;border-radius:34px;background:var(--card);box-shadow:var(--sh);border:1px solid var(--line);padding:16px 14px 0;display:flex;flex-direction:column;gap:10px;overflow:hidden;position:relative}
+.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+ic{display:inline-flex;align-items:center;justify-content:center}
+.top{display:flex;align-items:center;justify-content:space-between;flex:none}
+.rb{width:34px;height:34px;border-radius:50%;background:var(--fill);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.logo{font-weight:700;color:var(--red);letter-spacing:.3px}
+.loc{display:flex;align-items:center;gap:4px;font-weight:500}
+.h{font-size:22px;font-weight:700;line-height:1.15;flex:none}
+.mute{color:var(--mute)}
+.img{background:var(--fill);border-radius:18px;color:var(--mute);display:flex;align-items:center;justify-content:center}
+.ban{background:var(--red);color:#fff;border-radius:20px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;height:92px}
+.ban b{font-size:16px;display:block;margin-bottom:2px}.ban .bt{background:#fff;color:var(--red);border-radius:12px;padding:5px 11px;font-weight:700;display:inline-block;margin-top:7px}
+.ban .img{width:70px;height:68px;background:rgba(255,255,255,.18);color:#fff;flex:none}
+.chips{display:flex;gap:6px;flex:none}
+.chip{background:var(--fill);border-radius:14px;padding:6px 12px;color:var(--mute);white-space:nowrap}.chip.on{background:var(--ink);color:var(--bg)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;flex:1;overflow:hidden}
+.it .img{height:78px}.it b{display:block;margin:6px 0 2px;font-weight:500}
+.pr{display:flex;justify-content:space-between;align-items:center}
+.pr .p{font-weight:700}
+.old{text-decoration:line-through;color:var(--mute);font-weight:400;font-size:11px;margin-left:4px}
+.add{width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center}.add .i{width:15px;height:15px;stroke-width:2.2}
+.nav{margin:auto 4px 14px;flex:none;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);border-radius:30px;padding:7px;display:flex;justify-content:space-around}
+.nav ic{width:40px;height:40px;border-radius:50%;color:var(--mute);position:relative}.nav .a{background:var(--red);color:#fff}
+.nav .dot{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--card)}
+.cta{background:var(--red);color:#fff;text-align:center;padding:14px;border-radius:18px;font-weight:700;flex:none}
+.cta.sec{background:var(--fill);color:var(--ink);font-weight:500}
+.dock{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:16px;flex:none}
+.stp{display:inline-flex;align-items:center;gap:10px;background:var(--fill);border-radius:16px;padding:4px;font-weight:700}
+.stp ic{width:26px;height:26px;border-radius:50%;background:var(--card)}.stp .i{width:14px;height:14px}
+.ln{display:flex;gap:10px;align-items:center;flex:none}.ln .img{width:52px;height:52px;border-radius:14px;flex:none}.ln .t{flex:1;line-height:1.35}
+.f{background:var(--fill);border-radius:14px;padding:10px 12px;flex:none}.f small{display:block;font-size:10px;color:var(--mute);margin-bottom:1px}
+.seg{display:flex;background:var(--fill);border-radius:14px;padding:3px;flex:none}.seg span{flex:1;text-align:center;padding:8px 4px;border-radius:11px;color:var(--mute)}.seg .on{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.mi{display:flex;align-items:center;gap:12px;padding:9px 2px;flex:none}.mi ic:first-child{width:34px;height:34px;border-radius:12px;background:var(--fill)}.mi span{flex:1}.mi .mute .i{width:16px;height:16px}
+.av{width:62px;height:62px;border-radius:50%;background:var(--fill);margin:4px auto 0;flex:none}
+.tg{width:34px;height:20px;border-radius:10px;background:var(--line);position:relative;flex:none}.tg:after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}.tg.on{background:var(--red)}.tg.on:after{left:16px}
+.tabs{display:flex;gap:18px;font-size:16px;font-weight:700;flex:none}.tabs .m{color:var(--mute);font-weight:500}.tabs .on{border-bottom:2.5px solid var(--red);padding-bottom:3px}
+.bd{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--red);color:#fff}.bd.g{background:var(--fill);color:var(--mute)}
+.oc{background:var(--fill);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:6px;flex:none}
+.tl{display:flex;justify-content:space-between;flex:none;font-size:10px;color:var(--mute);text-align:center}.tl div{flex:1}.tl i{display:block;width:12px;height:12px;border-radius:50%;background:var(--line);margin:0 auto 4px}.tl .d{color:var(--ink);font-weight:700}.tl .d i{background:var(--red)}
+.hero{position:absolute;inset:0;border-radius:0;background:var(--fill)}
+.sheet{margin:auto -14px 0;background:var(--card);border-radius:28px 28px 0 0;padding:18px 16px 18px;display:flex;flex-direction:column;gap:10px;position:relative;box-shadow:0 -8px 24px rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+<symbol id="tag" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1"/></symbol>
+<symbol id="bag" viewBox="0 0 24 24"><path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></symbol>
+<symbol id="pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.5A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+<symbol id="receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+<symbol id="grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
+<symbol id="phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="chat" viewBox="0 0 24 24"><path d="M4 20l1.5-4.5A8 8 0 1 1 8.5 18.5z"/></symbol>
+<symbol id="card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/></symbol>
+<symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/></symbol>
+<symbol id="out" viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></symbol>
+<symbol id="img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.5"/><path d="M3 17l5-4 4 3 3-2 6 4"/></symbol>
+</defs></svg>
+
+<header>
+<h1>Chicken Town app – wireframes v2</h1>
+<p>Redrafted to be lighter and calmer: more white space, rounded shapes, one red accent, and an icon-only bottom bar. Swipe sideways through each row.</p>
+<span class="sw"><i></i>Brand red sampled from the Family Deal post: #CC1A16</span>
+</header>
+
+<h2>Get started</h2>
+<div class="row">
+
+<div class="col"><div class="ph" style="padding:0">
+<div class="hero img"><ic n="img"></ic></div>
+<div class="sheet">
+<span class="logo">CHICKEN TOWN</span>
+<div class="h">Hot, fresh and on its way.</div>
+<span class="mute">Swit u mot, swit u lyf.</span>
+<div class="cta" style="margin-top:4px">Order now</div>
+<div class="cta sec">Sign in</div>
+<div class="mute" style="text-align:center">Continue as guest</div>
+</div>
+</div><div class="cap"><b>Welcome.</b> One photo, one message, two buttons.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><span class="rb"><ic n="back"></ic></span><span class="logo">CHICKEN TOWN</span><span style="width:34px"></span></div>
+<div class="h" style="margin-top:10px">Welcome back</div>
+<div class="tabs"><span class="on">Sign in</span><span class="m">Sign up</span></div>
+<div class="f"><small>Email</small>you@email.com</div>
+<div class="f"><small>Password</small>••••••••</div>
+<div style="text-align:right;color:var(--red);flex:none">Forgot password?</div>
+<div class="cta">Sign in</div>
+<div class="mute" style="text-align:center;flex:none">or</div>
+<div class="cta sec">Continue with Google</div>
+<div class="mute" style="text-align:center;margin-top:auto;padding-bottom:18px">Continue as guest</div>
+</div><div class="cap"><b>Sign in.</b> Email, password or Google.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><span class="rb"><ic n="back"></ic></span><span class="logo">CHICKEN TOWN</span><span style="width:34px"></span></div>
+<div class="h" style="margin-top:10px">Create account</div>
+<div class="tabs"><span class="m">Sign in</span><span class="on">Sign up</span></div>
+<div class="f"><small>Full name</small>Your name</div>
+<div class="f"><small>Phone</small>+232 …</div>
+<div class="f"><small>Email</small>you@email.com</div>
+<div class="f"><small>Password</small>••••••••</div>
+<div class="dock"><div class="cta">Create account</div></div>
+</div><div class="cap"><b>Sign up.</b> Phone saved once, used at every checkout.</div></div>
+
+</div>
+
+<h2>Ordering</h2>
+<div class="row">
+
+<div class="col"><div class="ph">
+<div class="top"><span class="loc"><ic n="pin"></ic>Charlotte St<ic n="down"></ic></span><span class="rb"><ic n="search"></ic></span></div>
+<div class="h">What are you<br>eating today?</div>
+<div class="ban"><div><b>Family Deal</b>Le 460<br><span class="bt">Order</span></div><div class="img"><ic n="img"></ic></div></div>
+<div class="chips"><span class="chip on">All</span><span class="chip">Combos</span><span class="chip">Burgers</span><span class="chip">Wraps</span></div>
+<div class="grid">
+<div class="it"><div class="img"><ic n="img"></ic></div><b>CT-Wrap</b><div class="pr"><span class="p">Le 90</span><span class="add"><ic n="plus"></ic></span></div></div>
+<div class="it"><div class="img"><ic n="img"></ic></div><b>Whole Chicken</b><div class="pr"><span class="p">Le 200<span class="old">370</span></span><span class="add"><ic n="plus"></ic></span></div></div>
+</div>
+<div class="nav"><ic class="a" n="home"></ic><ic n="tag"></ic><ic n="bag"><i class="dot"></i></ic><ic n="user"></ic></div>
+</div><div class="cap"><b>Home.</b> Icon-only bar: home, offers, cart, profile.</div></div>
+
+<div class="col"><div class="ph" style="padding:0">
+<div class="img" style="height:230px;border-radius:0 0 30px 30px;flex:none;position:relative"><ic n="img"></ic>
+<span class="rb" style="position:absolute;top:16px;left:14px;background:var(--card)"><ic n="back"></ic></span>
+<span class="rb" style="position:absolute;top:16px;right:14px;background:var(--card)"><ic n="heart"></ic></span></div>
+<div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;flex:1">
+<div class="pr"><span class="h" style="font-size:19px">Wrap Combo</span><span class="h" style="font-size:19px;color:var(--red)">Le 140</span></div>
+<span class="mute" style="line-height:1.45">CT-Wrap, crispy chips and a drink.</span>
+<div class="seg"><span class="on">Sierra Juice</span><span>Coke</span><span>Water</span></div>
+<div class="dock"><div class="pr"><span class="stp"><ic n="minus"></ic>2<ic n="plus"></ic></span><span class="p" style="font-size:16px">Le 280</span></div><div class="cta">Add to cart</div></div>
+</div>
+</div><div class="cap"><b>Item.</b> Big photo, one choice row, one button.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><span class="rb"><ic n="back"></ic></span><b style="font-size:15px">Cart</b><span style="width:34px"></span></div>
+<div class="ln" style="margin-top:6px"><div class="img"><ic n="img"></ic></div><div class="t"><b>Wrap Combo</b><br><span class="mute">Le 140</span></div><span class="stp"><ic n="minus"></ic>2<ic n="plus"></ic></span></div>
+<div class="ln"><div class="img"><ic n="img"></ic></div><div class="t"><b>Ice Cream</b><br><span class="mute">Le 35</span></div><span class="stp"><ic n="minus"></ic>1<ic n="plus"></ic></span></div>
+<div class="ln"><div class="img"><ic n="img"></ic></div><div class="t"><b>Coca-Cola</b><br><span class="mute">Le 15</span></div><span class="stp"><ic n="minus"></ic>2<ic n="plus"></ic></span></div>
+<div class="dock"><div class="pr mute"><span>Subtotal</span><span>Le 345</span></div><div class="pr mute"><span>Delivery</span><span>by branch</span></div><div class="pr"><b style="font-size:15px">Total</b><b style="font-size:15px">Le 345</b></div><div class="cta">Checkout</div></div>
+</div><div class="cap"><b>Cart.</b> Quantities and total, nothing else.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><span class="rb"><ic n="back"></ic></span><b style="font-size:15px">Checkout</b><span style="width:34px"></span></div>
+<div class="seg"><span class="on">Delivery</span><span>Pickup</span></div>
+<div class="f"><small>Name</small>Prefilled</div>
+<div class="f"><small>Phone</small>Prefilled</div>
+<div class="f"><small>Address</small>Street, landmark</div>
+<div class="f"><small>Nearest branch</small>Charlotte St</div>
+<div class="f"><small>Note</small>Optional</div>
+<div class="dock"><div class="pr mute"><span>Pay on delivery</span><ic n="check"></ic></div><div class="cta">Place order · Le 345</div></div>
+</div><div class="cap"><b>Checkout.</b> Signed-in customers get fields prefilled.</div></div>
+
+<div class="col"><div class="ph">
+<div style="text-align:center;margin-top:22px;flex:none"><span class="add" style="width:52px;height:52px"><ic n="check"></ic></span><div class="h" style="margin-top:12px;font-size:19px">Order received</div><span class="mute">#CT-1042</span></div>
+<div class="tl" style="margin-top:6px"><div class="d"><i></i>Received</div><div><i></i>Preparing</div><div><i></i>Ready</div><div><i></i>Delivered</div></div>
+<div class="oc"><div class="pr"><span>2 × Wrap Combo</span></div><div class="pr"><span>1 × Ice Cream</span></div><div class="pr"><span>2 × Coca-Cola</span></div><div class="pr" style="margin-top:4px"><b>Total</b><b>Le 345</b></div></div>
+<div class="dock" style="flex-direction:row;align-items:center"><span class="rb" style="width:48px;height:48px"><ic n="phone"></ic></span><span class="rb" style="width:48px;height:48px"><ic n="chat"></ic></span><div class="cta" style="flex:1">Track order</div></div>
+</div><div class="cap"><b>Confirmation.</b> Call 392 and WhatsApp are the two round buttons.</div></div>
+
+</div>
+
+<h2>Your account</h2>
+<div class="row">
+
+<div class="col"><div class="ph">
+<div class="av"></div>
+<div style="text-align:center;flex:none"><b style="font-size:16px">Customer name</b><br><span class="mute">name@email.com</span></div>
+<div class="mi"><ic n="user"></ic><span>Personal information</span><ic class="mute" n="chev"></ic></div>
+<div class="mi"><ic n="receipt"></ic><span>My orders</span><ic class="mute" n="chev"></ic></div>
+<div class="mi"><ic n="pin"></ic><span>Saved addresses</span><ic class="mute" n="chev"></ic></div>
+<div class="mi"><ic n="heart"></ic><span>Favourites</span><ic class="mute" n="chev"></ic></div>
+<div class="mi"><ic n="help"></ic><span>Help &amp; support</span><ic class="mute" n="chev"></ic></div>
+<div class="mi"><ic n="out"></ic><span>Log out</span><ic class="mute" n="chev"></ic></div>
+<div class="nav"><ic n="home"></ic><ic n="tag"></ic><ic n="bag"></ic><ic class="a" n="user"></ic></div>
+</div><div class="cap"><b>Profile.</b> Help &amp; support opens Call and WhatsApp.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><span class="rb"><ic n="back"></ic></span><b style="font-size:15px">My orders</b><span style="width:34px"></span></div>
+<div class="tabs"><span class="on">Active</span><span class="m">Past</span></div>
+<div class="oc"><div class="pr"><b>#CT-1042</b><span class="bd">Preparing</span></div><span class="mute">2 × Wrap Combo, 1 × Ice Cream</span><div class="pr"><b>Le 345</b><span class="mute">Track</span></div></div>
+<div class="oc"><div class="pr"><b>#CT-1019</b><span class="bd g">Delivered</span></div><span class="mute">1 × Family Deal · 2 Sep</span><div class="pr"><b>Le 460</b><span style="color:var(--red);font-weight:700">Reorder</span></div></div>
+<div class="oc"><div class="pr"><b>#CT-0987</b><span class="bd g">Delivered</span></div><span class="mute">2 × Burger · 28 Aug</span><div class="pr"><b>Le 180</b><span style="color:var(--red);font-weight:700">Reorder</span></div></div>
+</div><div class="cap"><b>My orders.</b> Active orders on top, one-tap Reorder.</div></div>
+
+</div>
+
+<h2>Staff admin</h2>
+<div class="row">
+
+<div class="col"><div class="ph">
+<div class="top"><b style="font-size:17px">Menu</b><span class="rb" style="background:var(--red);color:#fff"><ic n="plus"></ic></span></div>
+<div class="chips"><span class="chip on">All</span><span class="chip">Combos</span><span class="chip">Drinks</span></div>
+<div class="ln"><div class="img" style="width:40px;height:40px"><ic n="img"></ic></div><div class="t"><b>CT-Wrap</b><br><span class="mute">Le 90</span></div><span class="tg on"></span></div>
+<div class="ln"><div class="img" style="width:40px;height:40px"><ic n="img"></ic></div><div class="t"><b>Burger</b><br><span class="mute">Le 90</span></div><span class="tg on"></span></div>
+<div class="ln"><div class="img" style="width:40px;height:40px"><ic n="img"></ic></div><div class="t"><b>Fried Rice</b><br><span class="mute">Le 50 · sold out</span></div><span class="tg"></span></div>
+<div class="ln"><div class="img" style="width:40px;height:40px"><ic n="img"></ic></div><div class="t"><b>Whole Chicken</b> <span class="bd">Offer</span><br><span class="mute">Le 200</span></div><span class="tg on"></span></div>
+<div class="nav"><ic n="receipt"></ic><ic class="a" n="grid"></ic></div>
+</div><div class="cap"><b>Menu manager.</b> Tap an item to edit. Toggle = available.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><span class="rb"><ic n="back"></ic></span><b style="font-size:15px">Edit item</b><span style="width:34px"></span></div>
+<div class="img" style="height:84px;flex:none;gap:6px"><ic n="img"></ic>Upload photo</div>
+<div class="f"><small>Name</small>Whole Chicken</div>
+<div style="display:flex;gap:8px;flex:none"><div class="f" style="flex:1"><small>Price (Le)</small>200</div><div class="f" style="flex:1"><small>Old price</small>370</div></div>
+<div class="pr" style="flex:none"><span>Run as an offer</span><span class="tg on"></span></div>
+<div style="display:flex;gap:8px;flex:none"><div class="f" style="flex:1"><small>Starts</small>1 Oct</div><div class="f" style="flex:1"><small>Ends</small>31 Oct</div></div>
+<div class="dock"><div class="cta">Save changes</div></div>
+</div><div class="cap"><b>Edit item.</b> Change price or set offer dates here.</div></div>
+
+<div class="col"><div class="ph">
+<div class="top"><b style="font-size:17px">Orders</b><span class="bd">3 new</span></div>
+<div class="chips"><span class="chip on">New</span><span class="chip">Preparing</span><span class="chip">Ready</span></div>
+<div class="oc"><div class="pr"><b>#CT-1042</b><span class="mute">Delivery</span></div><span class="mute">2 × Wrap Combo, 1 × Ice Cream</span><div class="pr"><b>Le 345</b><span class="bd">Start preparing</span></div></div>
+<div class="oc"><div class="pr"><b>#CT-1041</b><span class="mute">Pickup</span></div><span class="mute">1 × Family Deal</span><div class="pr"><b>Le 460</b><span class="bd">Start preparing</span></div></div>
+<div class="oc"><div class="pr"><b>#CT-1040</b><span class="mute">Delivery</span></div><span class="mute">3 × Burger</span><div class="pr"><b>Le 270</b><span class="bd">Start preparing</span></div></div>
+<div class="nav"><ic class="a" n="receipt"></ic><ic n="grid"></ic></div>
+</div><div class="cap"><b>Live orders.</b> New orders appear by themselves. One tap moves the status.</div></div>
+
+</div>
+<script>document.querySelectorAll('ic').forEach(function(e){var n=e.getAttribute('n');if(n){e.insertAdjacentHTML('afterbegin','<svg class="i" viewBox="0 0 24 24"><use href="#'+n+'"/></svg>')}});</script>
+</body>
+</html>
