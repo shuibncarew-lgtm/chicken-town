@@ -4,15 +4,18 @@ import { ChevronLeft, Heart, Minus, Plus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { MenuItem, ItemOption } from '../types'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 
 export default function ItemDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { addItem } = useCart()
+  const { user } = useAuth()
   const [item, setItem] = useState<MenuItem | null>(null)
   const [options, setOptions] = useState<ItemOption[]>([])
   const [selectedOption, setSelectedOption] = useState<ItemOption | null>(null)
   const [quantity, setQuantity] = useState(1)
+  const [isFavourite, setIsFavourite] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -26,10 +29,38 @@ export default function ItemDetail() {
       if (optionsRes.data && optionsRes.data.length > 0) {
         setSelectedOption(optionsRes.data[0])
       }
+
+      if (user) {
+        const { data: favData } = await supabase
+          .from('favourites')
+          .select('menu_item_id')
+          .eq('user_id', user.id)
+          .eq('menu_item_id', id)
+          .single()
+        setIsFavourite(!!favData)
+      }
+
       setLoading(false)
     }
     loadItem()
-  }, [id])
+  }, [id, user])
+
+  const toggleFavourite = async () => {
+    if (!user || !item) return
+    if (isFavourite) {
+      await supabase
+        .from('favourites')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('menu_item_id', item.id)
+      setIsFavourite(false)
+    } else {
+      await supabase
+        .from('favourites')
+        .insert({ user_id: user.id, menu_item_id: item.id })
+      setIsFavourite(true)
+    }
+  }
 
   if (loading || !item) {
     return (
@@ -56,7 +87,6 @@ export default function ItemDetail() {
 
   return (
     <div className="min-h-screen bg-page-light dark:bg-page-dark">
-      {/* Photo */}
       <div className="relative h-[230px] rounded-b-[30px] bg-fill-light dark:bg-fill-dark">
         <button
           onClick={() => navigate(-1)}
@@ -64,12 +94,14 @@ export default function ItemDetail() {
         >
           <ChevronLeft size={20} strokeWidth={1.7} />
         </button>
-        <button className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark">
-          <Heart size={20} strokeWidth={1.7} />
+        <button
+          onClick={toggleFavourite}
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark"
+        >
+          <Heart size={20} strokeWidth={1.7} className={isFavourite ? 'fill-brand text-brand' : ''} />
         </button>
       </div>
 
-      {/* Content */}
       <div className="flex flex-col gap-2.5 px-4 pt-4">
         <div className="flex items-center justify-between">
           <h1 className="text-[19px] font-bold text-ink-light dark:text-ink-dark">{item.name}</h1>
@@ -80,7 +112,6 @@ export default function ItemDetail() {
           {item.description}
         </p>
 
-        {/* Options */}
         {options.length > 0 && (
           <div className="mt-2 flex rounded-field bg-fill-light p-1 dark:bg-fill-dark">
             {options.map(opt => (
@@ -99,7 +130,6 @@ export default function ItemDetail() {
           </div>
         )}
 
-        {/* Bottom section */}
         <div className="mt-auto flex flex-col gap-2.5 pb-6 pt-8">
           <div className="flex items-center justify-between">
             <div className="inline-flex items-center gap-2.5 rounded-chip bg-fill-light p-1 dark:bg-fill-dark">

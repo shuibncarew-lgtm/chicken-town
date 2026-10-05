@@ -64,7 +64,7 @@ React + Vite + TypeScript + Tailwind + React Router, Supabase (Postgres, Auth, R
 ## 9. BUILD ORDER (one phase at a time)
 - Phase 0: Scaffold the project, design tokens from DESIGN.md, routing, env file setup. Show it running.
 - Phase 1: Database only. Write the SQL (tables, constraints, create_order function, RLS policies) and seed data. Test with dummy orders in SQL, including R1 (change a price, confirm old orders do not change) and R2. No screens yet.
-- Phase 2: Customer Home, Item detail and Cart (screens 04, 05, 06) using a temporary mock user, controlled by a DEV_MOCK_USER env flag that must be OFF in production.
+- Phase 2: Customer Home, Item detail and Cart (screens 04, 05, 06).
 - Phase 3: Checkout, order creation, confirmation and My orders (screens 07, 08, 10).
 - Phase 4: Admin menu manager and edit item/offer with image upload (screens 11, 12).
 - Phase 5: Admin live orders with realtime, status changes and payment verification (screen 13).

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import { Branch } from '../types'
 
 interface Settings {
@@ -15,6 +16,7 @@ interface Settings {
 export default function Checkout() {
   const navigate = useNavigate()
   const { items, clearCart } = useCart()
+  const { user } = useAuth()
   const [orderType, setOrderType] = useState<'delivery' | 'pickup'>('delivery')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -78,6 +80,7 @@ export default function Checkout() {
         p_items: orderItems,
         p_note: note,
         p_payment_method: paymentMethod,
+        p_user_id: user?.id || null,
       })
 
       if (error) throw error
