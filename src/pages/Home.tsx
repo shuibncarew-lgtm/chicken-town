@@ -82,49 +82,53 @@ export default function Home() {
       <div key={item.id} className="relative">
         <button
           onClick={() => navigate(`/item/${item.id}`)}
-          className="w-full pr-12 text-left"
+          className="w-full text-left"
         >
-          <div className="flex aspect-[4/3] items-center justify-center rounded-card bg-fill-light dark:bg-fill-dark">
+          <div className="relative flex aspect-square items-center justify-center rounded-2xl bg-fill-light dark:bg-fill-dark">
             {item.image_url ? (
-              <img src={item.image_url} alt={item.name} className="h-full w-full rounded-card object-cover" loading="lazy" />
+              <img src={item.image_url} alt={item.name} className="h-full w-full rounded-2xl object-cover" loading="lazy" />
             ) : (
               <span className="text-xs font-bold text-muted-light/15 dark:text-muted-dark/15">CT</span>
             )}
+            {item.is_offer && (
+              <span className="absolute left-2 top-2 rounded-chip bg-white px-2 py-0.5 text-[10px] font-medium text-brand">
+                Offer
+              </span>
+            )}
           </div>
-          <p className="mt-1.5 text-sm font-medium text-ink-light dark:text-ink-dark">{item.name}</p>
-          <p className="truncate text-xs text-muted-light dark:text-muted-dark">{item.description}</p>
-          <p className="text-sm font-bold text-ink-light dark:text-ink-dark">
+          <p className="mt-2 truncate text-[15px] font-semibold text-ink-light dark:text-ink-dark">{item.name}</p>
+          <p className="mt-0.5 line-clamp-2 text-xs text-muted-light dark:text-muted-dark">{item.description}</p>
+          <p className="mt-1 text-[15px] font-bold text-brand">
             Le {item.price}
             {item.original_price && (
-              <span className="ml-1 text-sm font-normal text-muted-light line-through dark:text-muted-dark">
+              <span className="ml-1 text-xs font-normal text-muted-light line-through dark:text-muted-dark">
                 {item.original_price}
               </span>
             )}
           </p>
         </button>
-        <div className="absolute bottom-8 right-0">
+        <div className="absolute -bottom-2 right-2">
           {qty === 0 ? (
             <button
               onClick={() => handleAddToCart(item)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-md"
-              style={{ marginRight: '-4px', marginBottom: '-4px' }}
+              className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-brand text-white shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
             >
-              <span className="text-lg font-bold">+</span>
+              <span className="text-xl font-bold">+</span>
             </button>
           ) : (
-            <div className="inline-flex items-center gap-2 rounded-chip bg-fill-light p-1 dark:bg-fill-dark">
+            <div className="inline-flex items-center gap-1 rounded-full border-2 border-white bg-brand p-1 text-white shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
               <button
                 onClick={() => handleUpdateQuantity(item.id, qty - 1)}
-                className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-white"
               >
-                <span className="text-sm font-bold">−</span>
+                <span className="text-base font-bold">−</span>
               </button>
-              <span className="text-sm font-bold text-ink-light dark:text-ink-dark">{qty}</span>
+              <span className="text-sm font-bold text-white">{qty}</span>
               <button
                 onClick={() => handleUpdateQuantity(item.id, qty + 1)}
-                className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-white"
               >
-                <span className="text-sm font-bold">+</span>
+                <span className="text-base font-bold">+</span>
               </button>
             </div>
           )}
@@ -207,14 +211,14 @@ export default function Home() {
       </div>
 
       {selectedCategory === 'all' ? (
-        <div className="px-4">
+        <div className="px-4 pb-[100px]">
           {categories.map(cat => {
             const catItems = menuItems.filter(i => i.category_id === cat.id)
             if (catItems.length === 0) return null
             return (
-              <div key={cat.id} ref={el => { sectionRefs.current[cat.id] = el }} className="mb-6">
-                <h2 className="mb-3 text-lg font-bold text-ink-light dark:text-ink-dark">{cat.name}</h2>
-                <div className="grid grid-cols-2 gap-2.5">
+              <div key={cat.id} ref={el => { sectionRefs.current[cat.id] = el }} className="mt-5 mb-3">
+                <h2 className="text-lg font-bold text-ink-light dark:text-ink-dark">{cat.name}</h2>
+                <div className="mt-3 grid grid-cols-2 gap-3">
                   {catItems.map(item => renderCard(item))}
                 </div>
               </div>
@@ -222,7 +226,7 @@ export default function Home() {
           })}
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-2.5 px-4">
+        <div className="grid grid-cols-2 gap-3 px-4 pb-[100px]">
           {filteredItems.map(item => renderCard(item))}
         </div>
       )}
