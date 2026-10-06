@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { User, Receipt, MapPin, Heart, HelpCircle, LogOut, ChevronRight } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import BottomNav from '../components/BottomNav'
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -107,6 +108,8 @@ export default function Profile() {
           </div>
         </div>
       )}
+
+      <BottomNav />
     </div>
   )
 }

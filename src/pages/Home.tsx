@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MapPin, ChevronDown, Search } from 'lucide-react'
+import { MapPin, ChevronDown, Search, Check } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Branch, Category, MenuItem } from '../types'
 import { useCart } from '../context/CartContext'
@@ -9,12 +9,13 @@ import BottomNav from '../components/BottomNav'
 export default function Home() {
   const navigate = useNavigate()
   const { addItem, items: cartItems, updateQuantity } = useCart()
-  const [, setBranches] = useState<Branch[]>([])
+  const [branches, setBranches] = useState<Branch[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [loading, setLoading] = useState(true)
+  const [showBranchPicker, setShowBranchPicker] = useState(false)
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   useEffect(() => {
@@ -81,7 +82,7 @@ export default function Home() {
       <div key={item.id} className="relative">
         <button
           onClick={() => navigate(`/item/${item.id}`)}
-          className="w-full text-left"
+          className="w-full pr-12 text-left"
         >
           <div className="flex aspect-[4/3] items-center justify-center rounded-card bg-fill-light dark:bg-fill-dark">
             {item.image_url ? (
@@ -135,7 +136,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-page-light page-padding dark:bg-page-dark">
       <div className="flex items-center justify-between px-4 pt-6">
-        <button className="flex items-center gap-1 text-sm font-medium text-ink-light dark:text-ink-dark">
+        <button
+          onClick={() => setShowBranchPicker(true)}
+          className="flex items-center gap-1 text-sm font-medium text-ink-light dark:text-ink-dark"
+        >
           <MapPin size={16} strokeWidth={1.7} />
           {selectedBranch?.name || 'Select branch'}
           <ChevronDown size={14} strokeWidth={1.7} />
@@ -208,8 +212,8 @@ export default function Home() {
             const catItems = menuItems.filter(i => i.category_id === cat.id)
             if (catItems.length === 0) return null
             return (
-              <div key={cat.id} ref={el => { sectionRefs.current[cat.id] = el }}>
-                <h2 className="mb-2 text-sm font-bold text-ink-light dark:text-ink-dark">{cat.name}</h2>
+              <div key={cat.id} ref={el => { sectionRefs.current[cat.id] = el }} className="mb-6">
+                <h2 className="mb-3 text-lg font-bold text-ink-light dark:text-ink-dark">{cat.name}</h2>
                 <div className="grid grid-cols-2 gap-2.5">
                   {catItems.map(item => renderCard(item))}
                 </div>
@@ -220,6 +224,40 @@ export default function Home() {
       ) : (
         <div className="grid grid-cols-2 gap-2.5 px-4">
           {filteredItems.map(item => renderCard(item))}
+        </div>
+      )}
+
+      {showBranchPicker && (
+        <div className="fixed inset-0 z-50 flex items-end bg-black/40">
+          <div className="w-full rounded-t-[28px] bg-card-light p-5 dark:bg-card-dark">
+            <h2 className="text-lg font-bold text-ink-light dark:text-ink-dark">Select branch</h2>
+            <div className="mt-4 flex flex-col gap-2">
+              {branches.map(branch => (
+                <button
+                  key={branch.id}
+                  onClick={() => {
+                    setSelectedBranch(branch)
+                    setShowBranchPicker(false)
+                  }}
+                  className="flex items-center justify-between rounded-field bg-fill-light px-4 py-3 text-left dark:bg-fill-dark"
+                >
+                  <div>
+                    <p className="text-sm font-bold text-ink-light dark:text-ink-dark">{branch.name}</p>
+                    <p className="text-xs text-muted-light dark:text-muted-dark">{branch.address}</p>
+                  </div>
+                  {selectedBranch?.id === branch.id && (
+                    <Check size={18} className="text-brand" />
+                  )}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowBranchPicker(false)}
+              className="mt-4 w-full rounded-button bg-fill-light py-3 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
 
