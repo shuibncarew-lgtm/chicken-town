@@ -82,12 +82,18 @@ export default function ItemDetail() {
       option_label: selectedOption?.label,
       image_url: item.image_url,
     })
-    navigate('/cart')
   }
 
   return (
     <div className="min-h-screen bg-page-light dark:bg-page-dark">
       <div className="relative h-[230px] rounded-b-[30px] bg-fill-light dark:bg-fill-dark">
+        {item.image_url ? (
+          <img src={item.image_url} alt={item.name} className="h-full w-full rounded-b-[30px] object-cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center rounded-b-[30px] bg-fill-light dark:bg-fill-dark">
+            <span className="text-2xl font-bold text-muted-light/15 dark:text-muted-dark/15">CT</span>
+          </div>
+        )}
         <button
           onClick={() => navigate(-1)}
           className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark"
@@ -154,7 +160,7 @@ export default function ItemDetail() {
             onClick={handleAddToCart}
             className="w-full rounded-button bg-brand py-3.5 text-center text-sm font-bold text-white"
           >
-            Add to cart
+            Add to cart · Le {total}
           </button>
         </div>
       </div>

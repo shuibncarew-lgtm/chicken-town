@@ -85,23 +85,60 @@ export default function AdminEditItem() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${Date.now()}.${fileExt}`
+    const compressImage = (file: File): Promise<Blob> => {
+      return new Promise((resolve, reject) => {
+        const img = new window.Image()
+        const url = URL.createObjectURL(file)
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          let { width, height } = img
 
-    const { error } = await supabase.storage
-      .from('menu-images')
-      .upload(fileName, file)
+          if (width > 1200) {
+            height = (height * 1200) / width
+            width = 1200
+          }
 
-    if (error) {
-      alert('Failed to upload image. Please try again.')
-      return
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          if (!ctx) { reject(new Error('Canvas not supported')); return }
+          ctx.drawImage(img, 0, 0, width, height)
+          URL.revokeObjectURL(url)
+          canvas.toBlob(
+            (blob) => {
+              if (blob) resolve(blob)
+              else reject(new Error('Compression failed'))
+            },
+            'image/webp',
+            0.85
+          )
+        }
+        img.onerror = reject
+        img.src = url
+      })
     }
 
-    const { data: urlData } = supabase.storage
-      .from('menu-images')
-      .getPublicUrl(fileName)
+    try {
+      const blob = await compressImage(file)
+      const fileName = `${Date.now()}.webp`
 
-    setImageUrl(urlData.publicUrl)
+      const { error } = await supabase.storage
+        .from('menu-images')
+        .upload(fileName, blob)
+
+      if (error) {
+        alert('Failed to upload image. Please try again.')
+        return
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('menu-images')
+        .getPublicUrl(fileName)
+
+      setImageUrl(urlData.publicUrl)
+    } catch (err) {
+      alert('Failed to process image. Please try another one.')
+    }
   }
 
   if (loading) {

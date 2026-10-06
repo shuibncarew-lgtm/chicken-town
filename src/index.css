@@ -21,4 +21,8 @@
   .app-shell {
     @apply mx-auto min-h-screen max-w-[430px] bg-page-light dark:bg-page-dark;
   }
+
+  .page-padding {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  }
 }

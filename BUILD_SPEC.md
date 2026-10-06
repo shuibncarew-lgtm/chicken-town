@@ -69,7 +69,7 @@ React + Vite + TypeScript + Tailwind + React Router, Supabase (Postgres, Auth, R
 - Phase 4: Admin menu manager and edit item/offer with image upload (screens 11, 12).
 - Phase 5: Admin live orders with realtime, status changes and payment verification (screen 13).
 - Phase 6: Real authentication: Welcome, Sign in, Sign up, Profile (screens 01, 02, 03, 09), roles, branch staff, and finalize RLS. REQUIRED: remove the mock user and test every R3 rule with a customer, a branch staff user and the owner.
-- Phase 7: Deploy to Vercel, add environment variables, give me the live URL.
+- Phase 7: Deploy to Cloudflare Pages (build: npm run build, output: dist, env: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY), give me the live URL.
 
 After phase 7: write automated tests for R1 to R6, and give me a manual testing checklist (empty fields, zero or negative quantities, odd characters, a second phone).
 

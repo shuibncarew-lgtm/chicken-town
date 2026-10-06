@@ -19,6 +19,7 @@ import Welcome from './pages/Welcome'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import InstallPrompt from './components/InstallPrompt'
+import CartBar from './components/CartBar'
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/profile/addresses" element={<SavedAddresses />} />
             <Route path="/profile/favourites" element={<Favourites />} />
           </Routes>
+          <CartBar />
           <InstallPrompt />
         </div>
       </CartProvider>
