@@ -322,16 +322,16 @@ INSERT INTO categories (name, sort_order) VALUES
 
 -- Menu Items: Super Promo
 INSERT INTO menu_items (category_id, name, description, price, original_price, is_offer, sort_order)
-SELECT id, 'Mami Meal 20', 'Rice and egg', 20, NULL, true, 1 FROM categories WHERE name = 'Super Promo';
+SELECT id, 'Mami Meal', 'Rice and egg', 20, NULL, true, 1 FROM categories WHERE name = 'Super Promo';
 
 INSERT INTO menu_items (category_id, name, description, price, original_price, is_offer, sort_order)
-SELECT id, 'Sissy Meal 30', 'Rice and egg + 1 crispy wing', 30, NULL, true, 2 FROM categories WHERE name = 'Super Promo';
+SELECT id, 'Sissy Meal', 'Rice and egg + 1 crispy wing', 30, NULL, true, 2 FROM categories WHERE name = 'Super Promo';
 
 INSERT INTO menu_items (category_id, name, description, price, original_price, is_offer, sort_order)
-SELECT id, 'Mama Sharp 40', 'Rice and egg + 1 crispy wing + 1 sticky wing', 40, NULL, true, 3 FROM categories WHERE name = 'Super Promo';
+SELECT id, 'Mama Sharp', 'Rice and egg + 1 crispy wing + 1 sticky wing', 40, NULL, true, 3 FROM categories WHERE name = 'Super Promo';
 
 INSERT INTO menu_items (category_id, name, description, price, original_price, is_offer, sort_order)
-SELECT id, 'Slay Queen 60', '1 crispy wing, 1 sticky wing, 1 mini burger', 60, NULL, true, 4 FROM categories WHERE name = 'Super Promo';
+SELECT id, 'Slay Queen', '1 crispy wing, 1 sticky wing, 1 mini burger', 60, NULL, true, 4 FROM categories WHERE name = 'Super Promo';
 
 -- Menu Items: Mains
 INSERT INTO menu_items (category_id, name, description, price, original_price, is_offer, sort_order)

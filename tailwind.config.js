@@ -30,8 +30,8 @@ export default {
           dark: '#F3EFEC',
         },
         muted: {
-          light: '#8B8581',
-          dark: '#9B948E',
+          light: '#5F5A56',
+          dark: '#B0AAA4',
         },
       },
       fontFamily: {
