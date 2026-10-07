@@ -7,13 +7,17 @@ How to use this folder:
 
 ## Design tokens
 - Brand red: #CC1A16 (dark mode #E5332D). The ONLY accent colour. Use for primary buttons, prices on item detail, offer badges, active nav icon, toggles.
-- Light: page #F6F5F4, card #FFFFFF, fill #F2F0EE, line #E8E5E2, text #1B1918, muted #8B8581
-- Dark: page #141211, card #1E1B1A, fill #2A2625, line #2F2B29, text #F3EFEC, muted #9B948E
-- Font: DM Sans (400, 500, 700). Base 13px. Headings 22px bold (screen title), 19px (item name), 15px (page header). Prices bold.
-- Radius: phone card 34, cards and photos 18, buttons 18, fields 14, chips 14, bottom nav pill 30, round buttons 50%
+- Light: page #F6F5F4, card #FFFFFF, fill #F2F0EE, line #E8E5E2, text #1B1918, muted #5F5A56
+- Dark: page #141211, card #1E1B1A, fill #2A2625, line #2F2B29, text #F3EFEC, muted #B0AAA4
+- Font: DM Sans (400, 500, 700). Base 13px. Headings 19px bold (screen title), 15px (item name), 15px (page header). Prices bold.
+- Radius: phone card 34, cards and photos 16-18, buttons 18, fields 14, chips 14, bottom nav pill 30, round buttons 50%
 - Shadow (floating nav and sheets): 0 8px 28px rgba(27,25,24,.10)
 - Style: lots of white space, no borders on cards (use fill colour), no gradients, no percentage-off banners.
 - Icons: lucide-react, stroke 1.7. Map: house, tag, shopping-bag, user, search, map-pin, chevron-left, chevron-right, chevron-down, heart, plus, minus, check, receipt, layout-grid, phone, message-circle, circle-help, log-out, image.
+- Contrast: minimum 4.5:1 for text. Muted text #5F5A56 on light, #B0AAA4 on dark. Old price 14px.
+- Image placeholder: soft #F2F0EE background with faint "CT" mark at 15% opacity. NO plus icon in placeholder.
+- Add-to-cart: grid card has red round + (36px visible, 44px tap area) on image bottom-right. After tap, becomes red pill stepper. Item screen has full-width red "Add to cart · Le X" button.
+- Offer badges: "Save Le X" pill (red bg, white text) for items with original_price. "Bundle" tag for items without. Never use percentages.
 
 ## Navigation
 - Customer bottom bar: floating pill, ICONS ONLY, NO TEXT: house (Home), tag (Offers), shopping-bag (Cart, small red dot when cart has items), user (Profile). Active icon = white icon inside a red circle (40px). Inactive = muted grey.

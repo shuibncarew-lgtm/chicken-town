@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MapPin, ChevronDown, Search, Check } from 'lucide-react'
+import { MapPin, ChevronDown, Search, Check, Phone } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Branch, Category, MenuItem } from '../types'
 import { useCart } from '../context/CartContext'
@@ -15,23 +15,36 @@ export default function Home() {
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [showBranchPicker, setShowBranchPicker] = useState(false)
+  const [callNumber, setCallNumber] = useState('392')
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   useEffect(() => {
     async function loadData() {
-      const [branchesRes, categoriesRes, itemsRes] = await Promise.all([
-        supabase.from('branches').select('*').eq('is_active', true),
-        supabase.from('categories').select('*').order('sort_order'),
-        supabase.from('menu_items').select('*').eq('is_available', true).order('sort_order'),
-      ])
-      setBranches(branchesRes.data || [])
-      setCategories(categoriesRes.data || [])
-      setMenuItems(itemsRes.data || [])
-      if (branchesRes.data && branchesRes.data.length > 0) {
-        setSelectedBranch(branchesRes.data[0])
+      try {
+        const [branchesRes, categoriesRes, itemsRes, settingsRes] = await Promise.all([
+          supabase.from('branches').select('*').eq('is_active', true),
+          supabase.from('categories').select('*').order('sort_order'),
+          supabase.from('menu_items').select('*').eq('is_available', true).order('sort_order'),
+          supabase.from('settings').select('call_number').single(),
+        ])
+        setBranches(branchesRes.data || [])
+        setCategories(categoriesRes.data || [])
+        setMenuItems(itemsRes.data || [])
+        if (branchesRes.data && branchesRes.data.length > 0) {
+          setSelectedBranch(branchesRes.data[0])
+        }
+        if (settingsRes.data) {
+          setCallNumber(settingsRes.data.call_number)
+        }
+        setError(false)
+      } catch (err) {
+        console.error('Failed to load menu:', err)
+        setError(true)
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     }
     loadData()
   }, [])
@@ -68,10 +81,53 @@ export default function Home() {
     }
   }
 
+  const handleRetry = () => {
+    setLoading(true)
+    setError(false)
+    window.location.reload()
+  }
+
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-page-light dark:bg-page-dark">
-        <p className="text-muted-light dark:text-muted-dark">Loading...</p>
+      <div className="min-h-screen bg-page-light page-padding dark:bg-page-dark">
+        <div className="flex items-center justify-between px-4 pt-6">
+          <div className="h-4 w-24 animate-pulse rounded bg-fill-light dark:bg-fill-dark" />
+          <div className="h-9 w-9 animate-pulse rounded-full bg-fill-light dark:bg-fill-dark" />
+        </div>
+        <div className="mt-4 px-4">
+          <div className="h-6 w-48 animate-pulse rounded bg-fill-light dark:bg-fill-dark" />
+          <div className="mt-2 h-6 w-32 animate-pulse rounded bg-fill-light dark:bg-fill-dark" />
+        </div>
+        <div className="mt-4 flex gap-1.5 px-4 pb-4">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="h-8 w-16 animate-pulse rounded-chip bg-fill-light dark:bg-fill-dark" />
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-3 px-4">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="animate-pulse">
+              <div className="aspect-square rounded-2xl bg-fill-light dark:bg-fill-dark" />
+              <div className="mt-2 h-4 w-3/4 rounded bg-fill-light dark:bg-fill-dark" />
+              <div className="mt-1 h-3 w-full rounded bg-fill-light dark:bg-fill-dark" />
+              <div className="mt-1 h-4 w-1/2 rounded bg-fill-light dark:bg-fill-dark" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-page-light px-4 dark:bg-page-dark">
+        <p className="text-base font-bold text-ink-light dark:text-ink-dark">Could not load the menu</p>
+        <p className="mt-1 text-sm text-muted-light dark:text-muted-dark">Try again</p>
+        <button
+          onClick={handleRetry}
+          className="mt-4 rounded-button bg-brand px-6 py-3 text-sm font-bold text-white"
+        >
+          Retry
+        </button>
       </div>
     )
   }
@@ -112,6 +168,7 @@ export default function Home() {
             <button
               onClick={() => handleAddToCart(item)}
               className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-brand text-white shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+              aria-label={`Add ${item.name} to cart`}
             >
               <span className="text-xl font-bold">+</span>
             </button>
@@ -120,6 +177,7 @@ export default function Home() {
               <button
                 onClick={() => handleUpdateQuantity(item.id, qty - 1)}
                 className="flex h-8 w-8 items-center justify-center rounded-full text-white"
+                aria-label="Decrease quantity"
               >
                 <span className="text-base font-bold">−</span>
               </button>
@@ -127,6 +185,7 @@ export default function Home() {
               <button
                 onClick={() => handleUpdateQuantity(item.id, qty + 1)}
                 className="flex h-8 w-8 items-center justify-center rounded-full text-white"
+                aria-label="Increase quantity"
               >
                 <span className="text-base font-bold">+</span>
               </button>
@@ -140,6 +199,22 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-page-light page-padding dark:bg-page-dark">
       <div className="flex items-center justify-between px-4 pt-6">
+        <p className="text-xs font-bold tracking-wide text-brand">CHICKEN TOWN</p>
+        <div className="flex items-center gap-2">
+          <a
+            href={`tel:${callNumber}`}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-fill-light text-ink-light dark:bg-fill-dark dark:text-ink-dark"
+            aria-label="Call us"
+          >
+            <Phone size={18} strokeWidth={1.7} />
+          </a>
+          <button className="flex h-9 w-9 items-center justify-center rounded-full bg-fill-light text-ink-light dark:bg-fill-dark dark:text-ink-dark" aria-label="Search">
+            <Search size={18} strokeWidth={1.7} />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center justify-between px-4">
         <button
           onClick={() => setShowBranchPicker(true)}
           className="flex items-center gap-1 text-sm font-medium text-ink-light dark:text-ink-dark"
@@ -148,12 +223,15 @@ export default function Home() {
           {selectedBranch?.name || 'Select branch'}
           <ChevronDown size={14} strokeWidth={1.7} />
         </button>
-        <button className="flex h-9 w-9 items-center justify-center rounded-full bg-fill-light text-ink-light dark:bg-fill-dark dark:text-ink-dark">
-          <Search size={18} strokeWidth={1.7} />
-        </button>
       </div>
 
-      <h1 className="mt-4 px-4 text-[22px] font-bold leading-tight text-ink-light dark:text-ink-dark">
+      {selectedBranch && (
+        <div className="mx-4 mt-2 rounded-chip bg-fill-light px-3 py-1.5 text-xs text-muted-light dark:bg-fill-dark dark:text-muted-dark">
+          Delivery from Le {selectedBranch.delivery_fee} · about 25 min
+        </div>
+      )}
+
+      <h1 className="mt-3 px-4 text-[19px] font-bold leading-tight text-ink-light dark:text-ink-dark">
         What are you<br />eating today?
       </h1>
 
@@ -184,7 +262,8 @@ export default function Home() {
         </div>
       )}
 
-      <div className="mt-4 flex gap-1.5 overflow-x-auto px-4 pb-4">
+      <div className="mt-4 flex gap-1.5 overflow-x-auto px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
+        <style>{`::-webkit-scrollbar { display: none; }`}</style>
         <button
           onClick={() => handleChipClick('all')}
           className={`whitespace-nowrap rounded-chip px-3 py-1.5 text-sm ${
