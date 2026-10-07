@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function Welcome() {
   const navigate = useNavigate()
+  const { continueAsGuest } = useAuth()
 
   return (
     <div className="flex min-h-screen flex-col bg-page-light dark:bg-page-dark">
@@ -26,17 +28,17 @@ export default function Welcome() {
         </button>
 
         <button
+          onClick={continueAsGuest}
+          className="mt-2 w-full rounded-button bg-fill-light py-3.5 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
+        >
+          Continue as guest
+        </button>
+
+        <button
           onClick={() => navigate('/sign-in')}
           className="mt-2 w-full rounded-button bg-fill-light py-3.5 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
         >
           Sign in
-        </button>
-
-        <button
-          onClick={() => navigate('/')}
-          className="mt-3 w-full text-center text-sm text-muted-light dark:text-muted-dark"
-        >
-          Continue as guest
         </button>
       </div>
     </div>

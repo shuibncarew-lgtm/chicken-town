@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 export default function SignIn() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { signIn } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const from = (location.state as any)?.from || '/'
 
   const handleSignIn = async () => {
     if (!email || !password) return
@@ -17,7 +19,7 @@ export default function SignIn() {
     setError('')
     try {
       await signIn(email, password)
-      navigate('/')
+      navigate(from, { replace: true })
     } catch (err: any) {
       setError(err.message || 'Sign in failed')
     } finally {

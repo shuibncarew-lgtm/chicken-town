@@ -1,6 +1,7 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider, useAuth } from './context/AuthContext'
+
 import Home from './pages/Home'
 import ItemDetail from './pages/ItemDetail'
 import Cart from './pages/Cart'
@@ -21,6 +22,21 @@ import SignUp from './pages/SignUp'
 import InstallPrompt from './components/InstallPrompt'
 import CartBar from './components/CartBar'
 
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { session, isGuest, loading } = useAuth()
+  const location = useLocation()
+
+  if (loading) {
+    return <div className="flex min-h-screen items-center justify-center bg-page-light dark:bg-page-dark"><p>Loading...</p></div>
+  }
+
+  if (!session && !isGuest) {
+    return <Navigate to="/welcome" state={{ from: location.pathname }} replace />
+  }
+
+  return <>{children}</>
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -30,20 +46,20 @@ export default function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/item/:id" element={<ItemDetail />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order/:id" element={<OrderConfirmation />} />
-            <Route path="/orders" element={<MyOrders />} />
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin/menu" element={<AdminMenu />} />
-            <Route path="/admin/menu/:id" element={<AdminEditItem />} />
-            <Route path="/admin/orders" element={<AdminOrders />} />
-            <Route path="/admin/settings" element={<Settings />} />
-            <Route path="/profile/addresses" element={<SavedAddresses />} />
-            <Route path="/profile/favourites" element={<Favourites />} />
+            <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
+            <Route path="/item/:id" element={<AuthGuard><ItemDetail /></AuthGuard>} />
+            <Route path="/cart" element={<AuthGuard><Cart /></AuthGuard>} />
+            <Route path="/checkout" element={<AuthGuard><Checkout /></AuthGuard>} />
+            <Route path="/order/:id" element={<AuthGuard><OrderConfirmation /></AuthGuard>} />
+            <Route path="/orders" element={<AuthGuard><MyOrders /></AuthGuard>} />
+            <Route path="/offers" element={<AuthGuard><Offers /></AuthGuard>} />
+            <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
+            <Route path="/admin/menu" element={<AuthGuard><AdminMenu /></AuthGuard>} />
+            <Route path="/admin/menu/:id" element={<AuthGuard><AdminEditItem /></AuthGuard>} />
+            <Route path="/admin/orders" element={<AuthGuard><AdminOrders /></AuthGuard>} />
+            <Route path="/admin/settings" element={<AuthGuard><Settings /></AuthGuard>} />
+            <Route path="/profile/addresses" element={<AuthGuard><SavedAddresses /></AuthGuard>} />
+            <Route path="/profile/favourites" element={<AuthGuard><Favourites /></AuthGuard>} />
           </Routes>
           <CartBar />
           <InstallPrompt />

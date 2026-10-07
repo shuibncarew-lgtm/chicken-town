@@ -7,11 +7,33 @@ import BottomNav from '../components/BottomNav'
 
 export default function Profile() {
   const navigate = useNavigate()
-  const { user, profile, signOut } = useAuth()
+  const { user, profile, signOut, isGuest, continueAsGuest } = useAuth()
   const [editing, setEditing] = useState(false)
   const [fullName, setFullName] = useState(profile?.full_name || '')
   const [phone, setPhone] = useState(profile?.phone || '')
   const [saving, setSaving] = useState(false)
+
+  if (isGuest || !user) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-page-light px-4 dark:bg-page-dark">
+        <h1 className="text-xl font-bold text-ink-light dark:text-ink-dark">Sign in to your account</h1>
+        <p className="mt-2 text-sm text-muted-light dark:text-muted-dark">Access your orders, saved addresses and favourites</p>
+        <button
+          onClick={() => navigate('/sign-in')}
+          className="mt-6 w-full max-w-xs rounded-button bg-brand py-3.5 text-center text-sm font-bold text-white"
+        >
+          Sign in
+        </button>
+        <button
+          onClick={continueAsGuest}
+          className="mt-2 w-full max-w-xs rounded-button bg-fill-light py-3.5 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
+        >
+          Continue as guest
+        </button>
+        <BottomNav />
+      </div>
+    )
+  }
 
   const handleSignOut = async () => {
     await signOut()

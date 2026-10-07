@@ -17,6 +17,7 @@ export default function Checkout() {
   const navigate = useNavigate()
   const { items, clearCart } = useCart()
   const { user } = useAuth()
+
   const [orderType, setOrderType] = useState<'delivery' | 'pickup'>('delivery')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -56,6 +57,27 @@ export default function Checkout() {
   const total = subtotal + deliveryFee
 
   const mobileMoneyNumbersSet = settings?.orange_money_number || settings?.afrimoney_number
+
+  if (!user) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-page-light px-4 dark:bg-page-dark">
+        <h1 className="text-xl font-bold text-ink-light dark:text-ink-dark">Sign in to place your order</h1>
+        <p className="mt-2 text-sm text-muted-light dark:text-muted-dark">Your cart will be saved</p>
+        <button
+          onClick={() => navigate('/sign-in', { state: { from: '/checkout' } })}
+          className="mt-6 w-full max-w-xs rounded-button bg-brand py-3.5 text-center text-sm font-bold text-white"
+        >
+          Sign in
+        </button>
+        <button
+          onClick={() => navigate('/welcome', { state: { from: '/checkout' } })}
+          className="mt-2 w-full max-w-xs rounded-button bg-fill-light py-3.5 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
+        >
+          Back
+        </button>
+      </div>
+    )
+  }
 
   const handlePlaceOrder = async () => {
     if (!name || !phone || !branchId) return
