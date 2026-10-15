@@ -21,6 +21,7 @@ export default function Home() {
   const [error, setError] = useState(false)
   const [showBranchPicker, setShowBranchPicker] = useState(false)
   const [callNumber, setCallNumber] = useState('392')
+  const [searchQuery, setSearchQuery] = useState('')
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   useEffect(() => {
@@ -52,9 +53,15 @@ export default function Home() {
     loadData()
   }, [])
 
-  const filteredItems = selectedCategory === 'all'
-    ? menuItems
-    : menuItems.filter(i => i.category_id === selectedCategory)
+  const filteredItems = (() => {
+    let items = selectedCategory === 'all'
+      ? menuItems
+      : menuItems.filter(i => i.category_id === selectedCategory)
+    if (searchQuery.trim()) {
+      items = items.filter(i => i.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    }
+    return items
+  })()
 
   const offerItems = menuItems.filter(i => i.is_offer && i.original_price).slice(0, 3)
 
@@ -221,9 +228,17 @@ export default function Home() {
         <input
           type="text"
           placeholder="Search the menu"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
           className="w-full bg-transparent text-sm text-black placeholder:text-secondary/60 focus:outline-none"
         />
       </div>
+
+      {searchQuery.trim() && filteredItems.length === 0 && (
+        <p className="px-4 py-8 text-center text-sm text-secondary">
+          No items found for '{searchQuery}'
+        </p>
+      )}
 
       <h1 className="mt-6 px-4 font-display text-[36px] uppercase leading-none tracking-tight text-black">
         What's cooking?
@@ -232,10 +247,9 @@ export default function Home() {
       {offerItems.length > 0 && (
         <div className="mx-4 mt-4 flex gap-3 overflow-x-auto">
           {offerItems.map(offerItem => (
-            <button
+            <div
               key={offerItem.id}
-              onClick={() => navigate(`/item/${offerItem.id}`)}
-              className="flex h-[120px] w-[280px] flex-none items-center justify-between rounded-card bg-brand p-4 text-left"
+              className="flex h-[120px] w-[280px] flex-none items-center justify-between overflow-hidden rounded-[20px] bg-brand p-4"
             >
               <div className="flex-1">
                 <span className="inline-block rounded-pill bg-yellow px-2.5 py-1 text-[10px] font-bold uppercase text-black">
@@ -251,14 +265,14 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="ml-3 flex h-[72px] w-[72px] flex-none items-center justify-center rounded-xl bg-white/20">
+              <div className="ml-3 flex h-[110px] w-[110px] flex-none items-center justify-center rounded-xl bg-white/20 overflow-hidden">
                 {offerItem.image_url ? (
-                  <img src={offerItem.image_url} alt="" className="h-full w-full rounded-xl object-cover" />
+                  <img src={offerItem.image_url} alt="" className="h-full w-full object-contain" />
                 ) : (
                   <span className="text-xs font-bold text-white/80">CT</span>
                 )}
               </div>
-            </button>
+            </div>
           ))}
         </div>
       )}
