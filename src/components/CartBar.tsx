@@ -1,11 +1,12 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
 export default function CartBar() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { items, totalItems } = useCart()
 
-  if (totalItems === 0) return null
+  if (totalItems === 0 || location.pathname === '/cart') return null
 
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
 
