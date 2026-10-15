@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'Chicken Town',
         short_name: 'Chicken Town',
         description: 'Order hot, fresh chicken for delivery or pickup',
-        theme_color: '#CC1A16',
-        background_color: '#F6F5F4',
+        theme_color: '#0B0B0B',
+        background_color: '#FBF7EC',
         display: 'standalone',
         start_url: '/',
         icons: [

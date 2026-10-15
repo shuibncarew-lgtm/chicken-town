@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MapPin, ChevronDown, Search, Check, Phone } from 'lucide-react'
+import { MapPin, ChevronDown, Search, Phone, Check } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Branch, Category, MenuItem } from '../types'
 import { useCart } from '../context/CartContext'
+import { formatLe } from '../lib/currency'
 import BottomNav from '../components/BottomNav'
+import Chip from '../components/Chip'
+import IconButton from '../components/IconButton'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -89,27 +92,31 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-page-light page-padding dark:bg-page-dark">
+      <div className="min-h-screen bg-cream page-padding">
         <div className="flex items-center justify-between px-4 pt-6">
-          <div className="h-4 w-24 animate-pulse rounded bg-fill-light dark:bg-fill-dark" />
-          <div className="h-9 w-9 animate-pulse rounded-full bg-fill-light dark:bg-fill-dark" />
+          <div className="h-5 w-32 animate-pulse rounded bg-surface" />
+          <div className="h-11 w-11 animate-pulse rounded-full border border-black/10" />
         </div>
         <div className="mt-4 px-4">
-          <div className="h-6 w-48 animate-pulse rounded bg-fill-light dark:bg-fill-dark" />
-          <div className="mt-2 h-6 w-32 animate-pulse rounded bg-fill-light dark:bg-fill-dark" />
+          <div className="h-11 w-full animate-pulse rounded-pill bg-surface" />
         </div>
-        <div className="mt-4 flex gap-1.5 px-4 pb-4">
+        <div className="mt-6 px-4">
+          <div className="h-8 w-48 animate-pulse rounded bg-surface" />
+        </div>
+        <div className="mt-4 px-4">
+          <div className="h-32 w-full animate-pulse rounded-card bg-brand/20" />
+        </div>
+        <div className="mt-4 flex gap-2 px-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-8 w-16 animate-pulse rounded-chip bg-fill-light dark:bg-fill-dark" />
+            <div key={i} className="h-9 w-20 animate-pulse rounded-pill bg-surface" />
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-3 px-4">
+        <div className="mt-4 grid grid-cols-2 gap-3 px-4">
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="animate-pulse">
-              <div className="aspect-square rounded-2xl bg-fill-light dark:bg-fill-dark" />
-              <div className="mt-2 h-4 w-3/4 rounded bg-fill-light dark:bg-fill-dark" />
-              <div className="mt-1 h-3 w-full rounded bg-fill-light dark:bg-fill-dark" />
-              <div className="mt-1 h-4 w-1/2 rounded bg-fill-light dark:bg-fill-dark" />
+              <div className="aspect-square rounded-xl bg-surface" />
+              <div className="mt-2 h-4 w-3/4 rounded bg-surface" />
+              <div className="mt-1 h-4 w-1/2 rounded bg-surface" />
             </div>
           ))}
         </div>
@@ -119,12 +126,12 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-page-light px-4 dark:bg-page-dark">
-        <p className="text-base font-bold text-ink-light dark:text-ink-dark">Could not load the menu</p>
-        <p className="mt-1 text-sm text-muted-light dark:text-muted-dark">Try again</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-cream px-4">
+        <p className="text-base font-bold text-black">Could not load the menu</p>
+        <p className="mt-1 text-sm text-secondary">Try again</p>
         <button
           onClick={handleRetry}
-          className="mt-4 rounded-button bg-brand px-6 py-3 text-sm font-bold text-white"
+          className="mt-4 rounded-pill bg-brand px-6 py-3 font-display text-sm uppercase tracking-wide text-white"
         >
           Retry
         </button>
@@ -135,57 +142,50 @@ export default function Home() {
   const renderCard = (item: MenuItem) => {
     const qty = getCartQuantity(item.id)
     return (
-      <div key={item.id} className="relative">
+      <div key={item.id} className="rounded-card bg-white p-3 shadow-sm">
         <button
           onClick={() => navigate(`/item/${item.id}`)}
-          className="w-full text-left"
+          className="block w-full text-left"
         >
-          <div className="relative flex aspect-square items-center justify-center rounded-2xl bg-fill-light dark:bg-fill-dark">
+          <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-surface">
             {item.image_url ? (
-              <img src={item.image_url} alt={item.name} className="h-full w-full rounded-2xl object-cover" loading="lazy" />
+              <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" loading="lazy" />
             ) : (
-              <span className="text-xs font-bold text-muted-light/15 dark:text-muted-dark/15">CT</span>
-            )}
-            {item.is_offer && (
-              <span className="absolute left-2 top-2 rounded-chip bg-white px-2 py-0.5 text-[10px] font-medium text-brand">
-                Offer
-              </span>
+              <span className="font-display text-lg text-black/15">CT</span>
             )}
           </div>
-          <p className="mt-2 truncate text-[15px] font-semibold text-ink-light dark:text-ink-dark">{item.name}</p>
-          <p className="mt-0.5 line-clamp-2 text-xs text-muted-light dark:text-muted-dark">{item.description}</p>
-          <p className="mt-1 text-[15px] font-bold text-brand">
-            Le {item.price}
-            {item.original_price && (
-              <span className="ml-1 text-xs font-normal text-muted-light line-through dark:text-muted-dark">
-                {item.original_price}
-              </span>
-            )}
+          <p className="mt-2 font-display text-[15px] uppercase leading-tight tracking-wide text-black">
+            {item.name}
           </p>
+          <div className="mt-1 flex items-end justify-between">
+            <p className="font-display text-[15px] uppercase text-black">
+              {formatLe(item.price)}
+            </p>
+          </div>
         </button>
-        <div className="absolute -bottom-2 right-2">
+        <div className="mt-2 flex justify-end">
           {qty === 0 ? (
             <button
               onClick={() => handleAddToCart(item)}
-              className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-brand text-white shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
               aria-label={`Add ${item.name} to cart`}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-brand text-white transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
               <span className="text-xl font-bold">+</span>
             </button>
           ) : (
-            <div className="inline-flex items-center gap-1 rounded-full border-2 border-white bg-brand p-1 text-white shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+            <div className="inline-flex items-center gap-1 rounded-full bg-surface p-1">
               <button
                 onClick={() => handleUpdateQuantity(item.id, qty - 1)}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-white"
                 aria-label="Decrease quantity"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-cream text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 <span className="text-base font-bold">−</span>
               </button>
-              <span className="text-sm font-bold text-white">{qty}</span>
+              <span className="min-w-[24px] text-center text-sm font-bold text-black">{qty}</span>
               <button
                 onClick={() => handleUpdateQuantity(item.id, qty + 1)}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-white"
                 aria-label="Increase quantity"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-cream text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 <span className="text-base font-bold">+</span>
               </button>
@@ -197,42 +197,36 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-page-light page-padding dark:bg-page-dark">
+    <div className="min-h-screen bg-cream page-padding">
       <div className="flex items-center justify-between px-4 pt-6">
-        <p className="text-xs font-bold tracking-wide text-brand">CHICKEN TOWN</p>
-        <div className="flex items-center gap-2">
-          <a
-            href={`tel:${callNumber}`}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-fill-light text-ink-light dark:bg-fill-dark dark:text-ink-dark"
-            aria-label="Call us"
-          >
-            <Phone size={18} strokeWidth={1.7} />
-          </a>
-          <button className="flex h-9 w-9 items-center justify-center rounded-full bg-fill-light text-ink-light dark:bg-fill-dark dark:text-ink-dark" aria-label="Search">
-            <Search size={18} strokeWidth={1.7} />
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-3 flex items-center justify-between px-4">
         <button
           onClick={() => setShowBranchPicker(true)}
-          className="flex items-center gap-1 text-sm font-medium text-ink-light dark:text-ink-dark"
+          className="flex items-center gap-1 text-sm font-medium text-black"
         >
           <MapPin size={16} strokeWidth={1.7} />
           {selectedBranch?.name || 'Select branch'}
           <ChevronDown size={14} strokeWidth={1.7} />
         </button>
+        <IconButton
+          label="Call us"
+          onClick={() => window.location.href = `tel:${callNumber}`}
+          className="border border-black/10 bg-transparent text-black"
+        >
+          <Phone size={18} strokeWidth={1.7} />
+        </IconButton>
       </div>
 
-      {selectedBranch && (
-        <div className="mx-4 mt-2 rounded-chip bg-fill-light px-3 py-1.5 text-xs text-muted-light dark:bg-fill-dark dark:text-muted-dark">
-          Delivery from Le {selectedBranch.delivery_fee} · about 25 min
-        </div>
-      )}
+      <div className="mx-4 mt-4 flex items-center gap-2 rounded-pill bg-surface px-4 py-3">
+        <Search size={18} strokeWidth={1.7} className="text-secondary" />
+        <input
+          type="text"
+          placeholder="Search the menu"
+          className="w-full bg-transparent text-sm text-black placeholder:text-secondary/60 focus:outline-none"
+        />
+      </div>
 
-      <h1 className="mt-3 px-4 text-[19px] font-bold leading-tight text-ink-light dark:text-ink-dark">
-        What are you<br />eating today?
+      <h1 className="mt-6 px-4 font-display text-[36px] uppercase leading-none tracking-tight text-black">
+        What's cooking?
       </h1>
 
       {offerItems.length > 0 && (
@@ -241,18 +235,25 @@ export default function Home() {
             <button
               key={offerItem.id}
               onClick={() => navigate(`/item/${offerItem.id}`)}
-              className="flex h-[92px] w-[260px] flex-none items-center justify-between rounded-card bg-brand px-4 text-left"
+              className="flex h-[120px] w-[280px] flex-none items-center justify-between rounded-card bg-brand p-4 text-left"
             >
-              <div>
-                <p className="text-base font-semibold text-white">{offerItem.name}</p>
-                <p className="text-lg font-semibold text-white">Le {offerItem.price}</p>
-                <span className="mt-1.5 inline-block rounded-chip bg-white px-3 py-1 text-xs font-bold text-brand">
-                  Order now
+              <div className="flex-1">
+                <span className="inline-block rounded-pill bg-yellow px-2.5 py-1 text-[10px] font-bold uppercase text-black">
+                  Save {formatLe(offerItem.original_price! - offerItem.price)}
                 </span>
+                <p className="mt-2 font-display text-lg uppercase leading-tight text-white">
+                  {offerItem.name}
+                </p>
+                <p className="mt-1 font-display text-lg uppercase text-white">
+                  {formatLe(offerItem.price)}
+                  <span className="ml-1 text-sm line-through opacity-70">
+                    {formatLe(offerItem.original_price!)}
+                  </span>
+                </p>
               </div>
-              <div className="flex h-[68px] w-[70px] flex-none items-center justify-center rounded-card bg-white/20">
+              <div className="ml-3 flex h-[72px] w-[72px] flex-none items-center justify-center rounded-xl bg-white/20">
                 {offerItem.image_url ? (
-                  <img src={offerItem.image_url} alt="" className="h-full w-full rounded-card object-cover" />
+                  <img src={offerItem.image_url} alt="" className="h-full w-full rounded-xl object-cover" />
                 ) : (
                   <span className="text-xs font-bold text-white/80">CT</span>
                 )}
@@ -262,30 +263,15 @@ export default function Home() {
         </div>
       )}
 
-      <div className="mt-4 flex gap-1.5 overflow-x-auto px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
+      <div className="mt-6 flex gap-2 overflow-x-auto px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
         <style>{`::-webkit-scrollbar { display: none; }`}</style>
-        <button
-          onClick={() => handleChipClick('all')}
-          className={`whitespace-nowrap rounded-chip px-3 py-1.5 text-sm ${
-            selectedCategory === 'all'
-              ? 'bg-ink-light text-page-light dark:bg-ink-dark dark:text-page-dark'
-              : 'bg-fill-light text-muted-light dark:bg-fill-dark dark:text-muted-dark'
-          }`}
-        >
+        <Chip active={selectedCategory === 'all'} onClick={() => handleChipClick('all')}>
           All
-        </button>
+        </Chip>
         {categories.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => handleChipClick(cat.id)}
-            className={`whitespace-nowrap rounded-chip px-3 py-1.5 text-sm ${
-              selectedCategory === cat.id
-                ? 'bg-ink-light text-page-light dark:bg-ink-dark dark:text-page-dark'
-                : 'bg-fill-light text-muted-light dark:bg-fill-dark dark:text-muted-dark'
-            }`}
-          >
+          <Chip key={cat.id} active={selectedCategory === cat.id} onClick={() => handleChipClick(cat.id)}>
             {cat.name}
-          </button>
+          </Chip>
         ))}
       </div>
 
@@ -295,8 +281,8 @@ export default function Home() {
             const catItems = menuItems.filter(i => i.category_id === cat.id)
             if (catItems.length === 0) return null
             return (
-              <div key={cat.id} ref={el => { sectionRefs.current[cat.id] = el }} className="mt-5 mb-3">
-                <h2 className="text-lg font-bold text-ink-light dark:text-ink-dark">{cat.name}</h2>
+              <div key={cat.id} ref={el => { sectionRefs.current[cat.id] = el }} className="mt-6 mb-3">
+                <h2 className="font-display text-xl uppercase tracking-wide text-black">{cat.name}</h2>
                 <div className="mt-3 grid grid-cols-2 gap-3">
                   {catItems.map(item => renderCard(item))}
                 </div>
@@ -312,8 +298,8 @@ export default function Home() {
 
       {showBranchPicker && (
         <div className="fixed inset-0 z-50 flex items-end bg-black/40">
-          <div className="w-full rounded-t-[28px] bg-card-light p-5 dark:bg-card-dark">
-            <h2 className="text-lg font-bold text-ink-light dark:text-ink-dark">Select branch</h2>
+          <div className="w-full rounded-t-[28px] bg-cream p-5">
+            <h2 className="font-display text-lg uppercase tracking-wide text-black">Select branch</h2>
             <div className="mt-4 flex flex-col gap-2">
               {branches.map(branch => (
                 <button
@@ -322,11 +308,11 @@ export default function Home() {
                     setSelectedBranch(branch)
                     setShowBranchPicker(false)
                   }}
-                  className="flex items-center justify-between rounded-field bg-fill-light px-4 py-3 text-left dark:bg-fill-dark"
+                  className="flex items-center justify-between rounded-pill bg-surface px-4 py-3 text-left"
                 >
                   <div>
-                    <p className="text-sm font-bold text-ink-light dark:text-ink-dark">{branch.name}</p>
-                    <p className="text-xs text-muted-light dark:text-muted-dark">{branch.address}</p>
+                    <p className="text-sm font-bold text-black">{branch.name}</p>
+                    <p className="text-xs text-secondary">{branch.address}</p>
                   </div>
                   {selectedBranch?.id === branch.id && (
                     <Check size={18} className="text-brand" />
@@ -336,7 +322,7 @@ export default function Home() {
             </div>
             <button
               onClick={() => setShowBranchPicker(false)}
-              className="mt-4 w-full rounded-button bg-fill-light py-3 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
+              className="mt-4 w-full rounded-pill bg-surface py-3 text-center text-sm font-medium text-black"
             >
               Cancel
             </button>

@@ -5,24 +5,27 @@
 @layer base {
   html {
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
   }
 
   body {
-    @apply bg-page-light text-ink-light;
-  }
-
-  .dark body {
-    @apply bg-page-dark text-ink-dark;
+    @apply bg-cream text-black;
   }
 }
 
 @layer components {
   .app-shell {
-    @apply mx-auto min-h-screen max-w-[430px] bg-page-light dark:bg-page-dark;
+    @apply mx-auto min-h-screen max-w-[430px] bg-cream;
   }
 
   .page-padding {
-    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

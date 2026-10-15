@@ -6,40 +6,49 @@ export default function Welcome() {
   const { continueAsGuest } = useAuth()
 
   return (
-    <div className="flex min-h-screen flex-col bg-page-light dark:bg-page-dark">
-      <div className="flex flex-1 items-center justify-center bg-fill-light dark:bg-fill-dark">
-        <p className="text-muted-light dark:text-muted-dark">Food photo</p>
+    <div className="flex min-h-screen flex-col bg-black">
+      <div className="flex flex-col items-center px-6 pt-16">
+        <h1 className="font-display text-[64px] uppercase leading-[0.9] tracking-tight">
+          <span className="block text-cream">Chicken</span>
+          <span className="block text-brand">Town</span>
+        </h1>
       </div>
 
-      <div className="rounded-t-[28px] bg-card-light p-5 dark:bg-card-dark">
-        <p className="text-sm font-bold tracking-wide text-brand">CHICKEN TOWN</p>
-        <h1 className="mt-2 text-[22px] font-bold leading-tight text-ink-light dark:text-ink-dark">
-          Hot, fresh and on its way.
-        </h1>
-        <p className="mt-1 text-sm text-muted-light dark:text-muted-dark">
-          Swit u mot, swit u lyf.
-        </p>
+      <div className="mx-6 mt-10 flex flex-1 items-center justify-center overflow-hidden rounded-[22px] bg-surface">
+        <span className="font-display text-sm uppercase tracking-widest text-black/30">
+          Hero photo
+        </span>
+      </div>
 
-        <button
-          onClick={() => navigate('/sign-up')}
-          className="mt-4 w-full rounded-button bg-brand py-3.5 text-center text-sm font-bold text-white"
-        >
-          Order now
-        </button>
+      <div className="px-6 pb-10 pt-10">
+        <h2 className="text-center font-display text-[42px] uppercase leading-[1.05] tracking-tight">
+          <span className="block text-cream">Swit yu mot.</span>
+          <span className="block text-brand">Swit yu lyf.</span>
+        </h2>
 
-        <button
-          onClick={continueAsGuest}
-          className="mt-2 w-full rounded-button bg-fill-light py-3.5 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
-        >
-          Continue as guest
-        </button>
+        <div className="mt-10 flex flex-col gap-3">
+          <button
+            onClick={() => navigate('/sign-up')}
+            className="flex h-14 w-full items-center justify-center rounded-pill bg-brand font-display text-lg uppercase tracking-wide text-white transition-colors hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
+            Order now
+          </button>
 
-        <button
-          onClick={() => navigate('/sign-in')}
-          className="mt-2 w-full rounded-button bg-fill-light py-3.5 text-center text-sm font-medium text-ink-light dark:bg-fill-dark dark:text-ink-dark"
-        >
-          Sign in
-        </button>
+          <button
+            onClick={() => navigate('/sign-in')}
+            className="flex h-14 w-full items-center justify-center rounded-pill border-2 border-cream font-display text-lg uppercase tracking-wide text-cream transition-colors hover:bg-cream hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
+            Sign in
+          </button>
+
+          <button
+            onClick={continueAsGuest}
+            className="mt-2 text-center text-cream underline decoration-cream/60 underline-offset-4 transition-colors hover:decoration-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream min-h-[44px]"
+            style={{ fontSize: '48px', lineHeight: '48px' }}
+          >
+            Continue as guest
+          </button>
+        </div>
       </div>
     </div>
   )

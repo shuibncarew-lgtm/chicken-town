@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import { Plus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { MenuItem } from '../types'
 import { useCart } from '../context/CartContext'
+import { formatLe } from '../lib/currency'
 import BottomNav from '../components/BottomNav'
 
 export default function Offers() {
-  const navigate = useNavigate()
-  const { addItem, items: cartItems, updateQuantity } = useCart()
+  const { addItem } = useCart()
   const [offers, setOffers] = useState<MenuItem[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -38,11 +37,6 @@ export default function Offers() {
   const deals = offers.filter(o => o.original_price)
   const superPromos = offers.filter(o => !o.original_price)
 
-  const getCartQuantity = (itemId: string) => {
-    const cartItem = cartItems.find(i => i.menu_item_id === itemId)
-    return cartItem?.quantity || 0
-  }
-
   const handleAddToCart = (item: MenuItem) => {
     addItem({
       menu_item_id: item.id,
@@ -53,122 +47,129 @@ export default function Offers() {
     })
   }
 
-  const handleUpdateQuantity = (itemId: string, quantity: number) => {
-    updateQuantity(itemId, quantity)
-  }
-
-  const renderCard = (item: MenuItem, isLarge = false) => {
-    const qty = getCartQuantity(item.id)
-    const savings = item.original_price ? item.original_price - item.price : 0
-
+  if (loading) {
     return (
-      <div key={item.id} className={`relative ${isLarge ? 'col-span-2' : ''}`}>
-        <button
-          onClick={() => navigate(`/item/${item.id}`)}
-          className="w-full text-left"
-        >
-          <div className={`flex items-center justify-center rounded-card bg-fill-light dark:bg-fill-dark ${isLarge ? 'aspect-[16/9]' : 'aspect-[4/3]'}`}>
-            {item.image_url ? (
-              <img src={item.image_url} alt={item.name} className="h-full w-full rounded-card object-cover" loading="lazy" />
-            ) : (
-              <span className="text-xs font-bold text-muted-light/15 dark:text-muted-dark/15">CT</span>
-            )}
-          </div>
-          <div className="mt-1.5 flex items-center gap-2">
-            <p className="text-sm font-medium text-ink-light dark:text-ink-dark">{item.name}</p>
-            {savings > 0 && (
-              <span className="rounded-chip bg-brand px-2 py-0.5 text-[10px] font-bold text-white">
-                Save Le {savings}
-              </span>
-            )}
-            {!item.original_price && (
-              <span className="rounded-chip bg-fill-light px-2 py-0.5 text-[10px] font-bold text-muted-light dark:bg-fill-dark dark:text-muted-dark">
-                Bundle
-              </span>
-            )}
-          </div>
-          <p className="truncate text-xs text-muted-light dark:text-muted-dark">{item.description}</p>
-          <p className="text-sm font-bold text-ink-light dark:text-ink-dark">
-            Le {item.price}
-            {item.original_price && (
-              <>
-                <span className="ml-1 text-sm font-normal text-muted-light line-through dark:text-muted-dark">
-                  {item.original_price}
-                </span>
-                {item.offer_ends_at && (
-                  <span className="ml-1 text-xs font-normal text-muted-light dark:text-muted-dark">
-                    Ends {new Date(item.offer_ends_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                  </span>
-                )}
-              </>
-            )}
-          </p>
-        </button>
-        <div className="absolute bottom-8 right-0">
-          {qty === 0 ? (
-            <button
-              onClick={() => handleAddToCart(item)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-md"
-              style={{ marginRight: '-4px', marginBottom: '-4px' }}
-            >
-              <span className="text-lg font-bold">+</span>
-            </button>
-          ) : (
-            <div className="inline-flex items-center gap-2 rounded-chip bg-fill-light p-1 dark:bg-fill-dark">
-              <button
-                onClick={() => handleUpdateQuantity(item.id, qty - 1)}
-                className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark"
-              >
-                <span className="text-sm font-bold">−</span>
-              </button>
-              <span className="text-sm font-bold text-ink-light dark:text-ink-dark">{qty}</span>
-              <button
-                onClick={() => handleUpdateQuantity(item.id, qty + 1)}
-                className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-card-light text-ink-light dark:bg-card-dark dark:text-ink-dark"
-              >
-                <span className="text-sm font-bold">+</span>
-              </button>
-            </div>
-          )}
+      <div className="min-h-screen bg-cream page-padding">
+        <div className="px-4 pt-6">
+          <div className="h-8 w-24 animate-pulse rounded bg-surface" />
+        </div>
+        <div className="mt-4 px-4">
+          <div className="h-40 w-full animate-pulse rounded-card bg-brand/20" />
+        </div>
+        <div className="mt-6 px-4">
+          <div className="h-6 w-32 animate-pulse rounded bg-surface" />
+        </div>
+        <div className="mt-4 flex flex-col gap-3 px-4">
+          {[1, 2].map(i => (
+            <div key={i} className="h-24 w-full animate-pulse rounded-card bg-white" />
+          ))}
         </div>
       </div>
     )
   }
 
-  if (loading) {
+  if (offers.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-page-light dark:bg-page-dark">
-        <p className="text-muted-light dark:text-muted-dark">Loading...</p>
+      <div className="flex min-h-screen flex-col bg-cream">
+        <div className="px-4 pt-6">
+          <h1 className="font-display text-2xl uppercase tracking-wide text-black">Offers</h1>
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-sm text-secondary">New deals soon</p>
+        </div>
+        <BottomNav />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-page-light page-padding dark:bg-page-dark">
-      <h1 className="px-4 pt-6 text-[22px] font-bold text-ink-light dark:text-ink-dark">Offers</h1>
+    <div className="min-h-screen bg-cream page-padding">
+      <div className="px-4 pt-6">
+        <h1 className="font-display text-2xl uppercase tracking-wide text-black">Offers</h1>
+      </div>
 
-      {offers.length === 0 ? (
-        <p className="px-4 py-8 text-center text-sm text-muted-light dark:text-muted-dark">
-          New deals soon
-        </p>
-      ) : (
-        <div className="mt-4 flex flex-col gap-6 px-4">
-          {deals.length > 0 && (
-            <div>
-              <h2 className="mb-2 text-sm font-bold text-ink-light dark:text-ink-dark">Deals</h2>
-              <div className="grid grid-cols-2 gap-2.5">
-                {deals.map(item => renderCard(item, deals.length === 1))}
+      {deals.length > 0 && (
+        <div className="mt-4 px-4">
+          {deals.map(deal => (
+            <div key={deal.id} className="rounded-card bg-brand p-4">
+              <div className="flex items-center justify-between">
+                <span className="inline-block rounded-pill bg-yellow px-2.5 py-1 text-[10px] font-bold uppercase text-black">
+                  Save {formatLe(deal.original_price! - deal.price)}
+                </span>
+                {deal.offer_ends_at && (
+                  <span className="text-xs text-white/80">
+                    Ends {new Date(deal.offer_ends_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                  </span>
+                )}
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <div className="flex-1">
+                  <p className="font-display text-xl uppercase leading-tight text-white">
+                    {deal.name}
+                  </p>
+                  <p className="mt-1 font-display text-xl uppercase text-white">
+                    {formatLe(deal.price)}
+                    <span className="ml-2 text-sm line-through opacity-70">
+                      {formatLe(deal.original_price!)}
+                    </span>
+                  </p>
+                  <button
+                    onClick={() => handleAddToCart(deal)}
+                    className="mt-3 rounded-pill bg-cream px-5 py-2.5 font-display text-sm uppercase tracking-wide text-black transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-brand"
+                  >
+                    Add to cart
+                  </button>
+                </div>
+                <div className="ml-3 flex h-[80px] w-[80px] flex-none items-center justify-center rounded-xl bg-white/20">
+                  {deal.image_url ? (
+                    <img src={deal.image_url} alt={deal.name} className="h-full w-full rounded-xl object-cover" />
+                  ) : (
+                    <span className="text-xs font-bold text-white/60">CT</span>
+                  )}
+                </div>
               </div>
             </div>
-          )}
-          {superPromos.length > 0 && (
-            <div>
-              <h2 className="mb-2 text-sm font-bold text-ink-light dark:text-ink-dark">Super Promo</h2>
-              <div className="grid grid-cols-2 gap-2.5">
-                {superPromos.map(item => renderCard(item))}
+          ))}
+        </div>
+      )}
+
+      {superPromos.length > 0 && (
+        <div className="mt-6 px-4">
+          <h2 className="font-display text-xl uppercase tracking-wide text-black">Super promo</h2>
+          <div className="mt-3 flex flex-col gap-3">
+            {superPromos.map(item => (
+              <div key={item.id} className="flex items-center gap-3 rounded-card bg-white p-3 shadow-sm">
+                <div className="flex h-16 w-16 flex-none items-center justify-center rounded-xl bg-surface">
+                  {item.image_url ? (
+                    <img src={item.image_url} alt={item.name} className="h-full w-full rounded-xl object-cover" />
+                  ) : (
+                    <span className="font-display text-xs text-black/15">CT</span>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col">
+                  <span className="inline-block w-fit rounded-pill bg-black px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-cream">
+                    Bundle
+                  </span>
+                  <p className="mt-1 font-display text-sm uppercase leading-tight text-black">
+                    {item.name}
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-secondary">
+                    {item.description}
+                  </p>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  <p className="font-display text-sm uppercase text-black">{formatLe(item.price)}</p>
+                  <button
+                    onClick={() => handleAddToCart(item)}
+                    aria-label={`Add ${item.name} to cart`}
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-brand text-white transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                  >
+                    <Plus size={20} strokeWidth={2.5} />
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       )}
 
